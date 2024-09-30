@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-to-Text, Translation, and Sentiment Analysis</title>
+    <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Speech-to-Text, Translation, and Sentiment Analysis</h2>
+    
+        <!-- Audio Upload -->
+        <form id="uploadForm">
+            <label for="audioFile">Upload Audio File:</label>
+            <input type="file" id="audioFile" accept="audio/*" required>
+            <button type="submit" id="submitBtn">Submit</button>
+        </form>
+    
+        <!-- Microphone Recording -->
+        <h3>Or record audio using your microphone:</h3>
+        <button id="recordBtn">Record Audio</button>
+        <button id="stopBtn">Stop Recording</button>
+    
+        <div id="output">
+            <h3>Results:</h3>
+            <p><strong>Transcription:</strong> <span id="transcription"></span></p>
+            
+            <!-- Dropdown for Translation Language -->
+            <label for="translateLanguageSelect">Select Language for Translation:</label>
+            <select id="translateLanguageSelect">
+                <option value="en">English</option>
+                <option value="ar">Arabic</option>
+            </select>
+            <!-- Translation Button -->
+             
+            <button id="translateBtn">Translate</button>
+            <br>
+            <!-- Dropdown for Sentiment Analysis Language -->
+            <label for="sentimentLanguageSelect">Select Language for Sentiment Analysis:</label>
+            <select id="sentimentLanguageSelect">
+                <option value="en">English</option>
+                <option value="ar">Arabic</option>
+            </select>
+            <!-- Sentiment Analysis Button -->
+            <button id="analyzeBtn">Analyze Sentiment</button>
+
+            <p><strong>Translation:</strong> <span id="translation"></span></p>
+            <p><strong>Sentiment Analysis:</strong> <span id="sentiment"></span></p>
+
+            <p class="error" id="error"></p>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        const transcriptionOutput = document.getElementById('transcription');
+        const translationOutput = document.getElementById('translation');
+        const sentimentOutput = document.getElementById('sentiment');
+        const errorOutput = document.getElementById('error');
+        
+        // Dropdowns for language selection
+        const translateLanguageSelect = document.getElementById('translateLanguageSelect');  // Dropdown for translation
+        const sentimentLanguageSelect = document.getElementById('sentimentLanguageSelect');  // Dropdown for sentiment analysis
+        
+        // Handling file upload
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+    
+            const audioFile = document.getElementById('audioFile').files[0];
+            if (!audioFile) {
+                errorOutput.textContent = 'Please upload an audio file.';
+                return;
+            }
+    
+            submitBtn.disabled = true;
+            transcriptionOutput.textContent = '';
+            translationOutput.textContent = '';
+            sentimentOutput.textContent = '';
+            errorOutput.textContent = '';
+    
+            const formData = new FormData();
+            formData.append('audio', audioFile);
+    
+            try {
+                const response = await fetch('https://<your-app-name>.azurewebsites.net/transcribe', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Error with the request');
+                }
+    
+                const data = await response.json();
+                transcriptionOutput.textContent = data.transcription;
+            } catch (error) {
+                errorOutput.textContent = 'Error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+    
+        // Handling microphone recording
+        let mediaRecorder;
+        let audioChunks = [];
+    
+        const recordBtn = document.getElementById('recordBtn');
+        const stopBtn = document.getElementById('stopBtn');
+    
+        recordBtn.addEventListener('click', async function() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+    
+                recordBtn.style.display = 'none';
+                stopBtn.style.display = 'inline-block';
+    
+                mediaRecorder.ondataavailable = function(event) {
+                    audioChunks.push(event.data);
+                };
+    
+                mediaRecorder.onstop = function() {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    sendAudioToServer(audioBlob);
+    
+                    audioChunks = [];
+                    recordBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                };
+            } catch (error) {
+                errorOutput.textContent = 'Microphone access denied or not available.';
+            }
+        });
+    
+        stopBtn.addEventListener('click', function() {
+            mediaRecorder.stop();
+        });
+    
+        async function sendAudioToServer(audioBlob) {
+            submitBtn.disabled = true;
+            transcriptionOutput.textContent = '';
+            translationOutput.textContent = '';
+            sentimentOutput.textContent = '';
+            errorOutput.textContent = '';
+    
+            const formData = new FormData();
+            formData.append('audio', audioBlob);
+    
+            try {
+                const response = await fetch('https://<your-app-name>.azurewebsites.net/transcribe', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Error with the request');
+                }
+    
+                const data = await response.json();
+                transcriptionOutput.textContent = data.transcription;
+            } catch (error) {
+                errorOutput.textContent = 'Error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Handling translation button
+        document.getElementById('translateBtn').addEventListener('click', async function() {
+            const transcriptionText = transcriptionOutput.textContent;
+            const selectedLanguage = translateLanguageSelect.value;  // Get selected language for translation
+            if (!transcriptionText) {
+                errorOutput.textContent = 'Please transcribe audio before translating.';
+                return;
+            }
+
+            try {
+                const response = await fetch('https://<your-app-name>.azurewebsites.net/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: transcriptionText, language: selectedLanguage }),  // Send translation language with request
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error with the request');
+                }
+
+                const data = await response.json();
+                translationOutput.textContent = data.translation;
+            } catch (error) {
+                errorOutput.textContent = 'Error: ' + error.message;
+            }
+        });
+
+        // Handling sentiment analysis button
+        document.getElementById('analyzeBtn').addEventListener('click', async function() {
+            const transcriptionText = transcriptionOutput.textContent;
+            const selectedLanguage = sentimentLanguageSelect.value;  // Get selected language for sentiment analysis
+            if (!transcriptionText) {
+                errorOutput.textContent = 'Please transcribe audio before analyzing sentiment.';
+                return;
+            }
+
+            try {
+                const response = await fetch('https://<your-app-name>.azurewebsites.net/analyze-sentiment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: transcriptionText, language: selectedLanguage }),  // Send sentiment analysis language with request
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error with the request');
+                }
+
+                const data = await response.json();
+                sentimentOutput.textContent = data.sentiment;
+            } catch (error) {
+                errorOutput.textContent = 'Error: ' + error.message;
+            }
+        });
+    });
+    </script>
+    
+</body>
+</html>
