@@ -18,12 +18,13 @@ This project is a web application that takes an audio file as input (in either A
 
 
 ## Project Structure
+```
 TELEK-APP/
 ├── env/                # Virtual environment for dependencies
 ├── templates/          # HTML templates for the web interface
 ├── app.py              # Main application file
 └── requirements.txt    # Required Python packages
-
+```
 
 ## Requirements
 
