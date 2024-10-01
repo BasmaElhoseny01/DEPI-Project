@@ -26,6 +26,10 @@ TELEK-APP/
 └── requirements.txt    # Required Python packages
 ```
 
+## Front
+![image](https://github.com/user-attachments/assets/29d63ef8-2efb-4541-b396-6248792860cf)
+
+
 ## Requirements
 
 To install the necessary packages, run:
