@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech-to-Text, Translation, and Sentiment Analysis</title>
+    <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Speech-to-Text, Translation, and Sentiment Analysis</h2>
+    
+        <!-- Audio Upload -->
+        <form id="uploadForm">
+            <label for="audioFile">Upload Audio File:</label>
+            <input type="file" id="audioFile" accept="audio/*" required>
+            <button type="submit" id="submitBtn">Submit</button>
+        </form>
+    
+        <!-- Microphone Recording -->
+        <h3>Or record audio using your microphone:</h3>
+        <button id="recordBtn">Record Audio</button>
+        <button id="stopBtn">Stop Recording</button>
+    
+        <div id="output">
+            <p><strong>Transcription:</strong> <span id="transcription"></span></p>
+            <p><strong>Translation:</strong> <span id="translation"></span></p>
+            <p><strong>Sentiment Analysis:</strong> <span id="sentiment"></span></p>
+            <p class="error" id="error"></p>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        const transcriptionOutput = document.getElementById('transcription');
+        const translationOutput = document.getElementById('translation'); // Keep for displaying translation if needed
+        const sentimentOutput = document.getElementById('sentiment'); // Keep for displaying sentiment if needed
+        const errorOutput = document.getElementById('error');
+        
+        // Handling file upload
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+    
+            const audioFile = document.getElementById('audioFile').files[0];
+            if (!audioFile) {
+                errorOutput.textContent = 'Please upload an audio file.';
+                return;
+            }
+            
+            console.log('Audio file type:', audioFile.type);
+
+            submitBtn.disabled = true;
+            transcriptionOutput.textContent = '';
+            translationOutput.textContent = ''; // Clear translation
+            sentimentOutput.textContent = ''; // Clear sentiment
+            errorOutput.textContent = '';
+    
+            const formData = new FormData();
+            formData.append('audio', audioFile);
+    
+            try {
+                const response = await fetch('http://48.217.82.28:8080/run', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Error with the request');
+                }
+    
+                const data = await response.json();
+                transcriptionOutput.textContent = data.transcript;  // Updated to 'transcript'
+                translationOutput.textContent = data.translation;   // Display translation if needed
+                sentimentOutput.textContent = data.sentiment;       // Display sentiment analysis if needed
+            } catch (error) {
+                errorOutput.textContent = 'Error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+    
+        // Handling microphone recording
+        let mediaRecorder;
+        let audioChunks = [];
+    
+        const recordBtn = document.getElementById('recordBtn');
+        const stopBtn = document.getElementById('stopBtn');
+    
+        recordBtn.addEventListener('click', async function() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+    
+                recordBtn.style.display = 'none';
+                stopBtn.style.display = 'inline-block';
+    
+                mediaRecorder.ondataavailable = function(event) {
+                    audioChunks.push(event.data);
+                };
+    
+                mediaRecorder.onstop = function() {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    sendAudioToServer(audioBlob);
+    
+                    audioChunks = [];
+                    recordBtn.style.display = 'inline-block';
+                    stopBtn.style.display = 'none';
+                };
+            } catch (error) {
+                errorOutput.textContent = 'Microphone access denied or not available.';
+            }
+        });
+    
+        stopBtn.addEventListener('click', function() {
+            mediaRecorder.stop();
+        });
+    
+        async function sendAudioToServer(audioBlob) {
+            submitBtn.disabled = true;
+            transcriptionOutput.textContent = '';
+            translationOutput.textContent = ''; // Clear translation
+            sentimentOutput.textContent = ''; // Clear sentiment
+            errorOutput.textContent = '';
+    
+            const formData = new FormData();
+            formData.append('audio', audioBlob);
+    
+            try {
+                const response = await fetch('http://48.217.82.28:8080/run', {
+                    method: 'POST',
+                    body: formData,
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Error with the request');
+                }
+    
+                const data = await response.json();
+                transcriptionOutput.textContent = data.transcript;
+                translationOutput.textContent = data.translation; // Display translation if needed
+                sentimentOutput.textContent = data.sentiment; // Display sentiment if needed
+            } catch (error) {
+                errorOutput.textContent = 'Error: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+    });
+    </script>
+    
+</body>
+</html>
