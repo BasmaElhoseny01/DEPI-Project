@@ -27,7 +27,6 @@ TELEK-APP/
 ```
 
 ## Front
-![image](https://github.com/user-attachments/assets/29d63ef8-2efb-4541-b396-6248792860cf)
 
 
 ## Requirements
@@ -38,11 +37,21 @@ To install the necessary packages, run:
 pip install -r requirements.txt
 ```
 
+Install ffm (if not installed on the machine):
+
+```bash
+sudo apt update
+sudo apt install ffmpeg
+ffmpeg -version
+```
+
 Activate the virtual environment:
 
 ```bash
 source env/bin/activate
 ```
+
+
 
 Then run the application:
 
@@ -51,7 +60,7 @@ python app.py
 ```
 
 ## Deployment
-This application is deployed on Azure. For details on deployment, refer to Azure documentation or check the deployment settings in the app. http://48.217.82.28
+This application is deployed on Azure. For details on deployment, refer to Azure documentation or check the deployment settings in the app. http://48.217.82.28:8080
 
 
 ## Usage
