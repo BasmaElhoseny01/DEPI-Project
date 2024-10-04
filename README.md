@@ -32,7 +32,11 @@ TELEK-APP/
 
 
 ## DEMO
-.......................TOBE DONE
+
+https://github.com/user-attachments/assets/458edfc6-833e-423f-b8d6-debbb0b6f8b6
+
+
+
 
 
 ## Requirements
