@@ -1,3 +1,5 @@
+
+https://github.com/user-attachments/assets/594a7122-250e-4291-9af5-dcc6d7af66fd
  # Speech-to-Text and Sentiment Analysis Application
 
 ![image](https://github.com/user-attachments/assets/f8fa4ac8-c18c-4900-8ca9-603e6aeffe92)
@@ -32,7 +34,7 @@ TELEK-APP/
 
 
 ## DEMO
-
+English Audio:
 https://github.com/user-attachments/assets/458edfc6-833e-423f-b8d6-debbb0b6f8b6
 
 
