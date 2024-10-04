@@ -34,7 +34,7 @@ TELEK-APP/
 
 
 ## DEMO
-English Audio:
+
 https://github.com/user-attachments/assets/458edfc6-833e-423f-b8d6-debbb0b6f8b6
 
 
