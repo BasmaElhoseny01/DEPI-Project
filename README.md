@@ -44,7 +44,6 @@ https://github.com/user-attachments/assets/05e25e76-47fe-4c03-8b1b-a942893e418f
 
 
 
-
 ## Requirements
 
 To install the necessary packages, run:
