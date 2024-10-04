@@ -26,7 +26,13 @@ TELEK-APP/
 └── requirements.txt    # Required Python packages
 ```
 
-## Front
+## UI
+![image](https://github.com/user-attachments/assets/64c2d670-e490-4ed9-bd2e-3c765568ae99)
+
+
+
+## DEMO
+.......................TOBE DONE
 
 
 ## Requirements
@@ -77,7 +83,7 @@ The results will be displayed on the interface.
 <table align="center" >
   <tr>
         <td align="center"><a href="https://github.com/MightyMaya"><img src="https://avatars.githubusercontent.com/u/130902434?v=4" width="150px;" alt=""/><br /><sub><b>Maya</b></sub></a><br /></td>
-        <td align="center"><a href="https://github.com/Reem463"><img src="https://avatars.githubusercontent.com/u/181993417?v=4" width="150px;" alt=""/><br /><sub><b>Reem Al Ghazali Elhoseny</b></sub></a><br /></td>
+        <td align="center"><a href="https://github.com/Reem463"><img src="https://avatars.githubusercontent.com/u/181993417?v=4" width="150px;" alt=""/><br /><sub><b>Reem Al Ghazali </b></sub></a><br /></td>
         <td align="center"><a href="https://github.com/BasmaElhoseny01"><img src="https://avatars.githubusercontent.com/u/72309546?v=4" width="150px;" alt=""/><br /><sub><b>Basma Elhoseny</b></sub></a><br /></td>
         <td align="center"><a href="https://github.com/MrJouH4"><img src="https://avatars.githubusercontent.com/u/75612905?v=4" width="150px;" alt=""/><br /><sub><b>Youssef Hisham</b></sub></a><br /></td>
         <td align="center"><a href="https://github.com/ZahyElgendy"><img src="https://avatars.githubusercontent.com/u/145224435?v=4" width="150px;" alt=""/><br /><sub><b>Zahy Elgendy</b></sub></a><br /></td>
