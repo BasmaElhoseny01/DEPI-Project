@@ -29,7 +29,8 @@ TELEK-APP/
 ```
 
 ## UI
-![image](https://github.com/user-attachments/assets/64c2d670-e490-4ed9-bd2e-3c765568ae99)
+![image](https://github.com/user-attachments/assets/4a6c81a1-e1e5-4ecd-b460-b07e60d416b4)
+
 
 
 
