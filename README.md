@@ -36,11 +36,16 @@ TELEK-APP/
 
 ## DEMO
 
-https://github.com/user-attachments/assets/458edfc6-833e-423f-b8d6-debbb0b6f8b6
+
+
+https://github.com/user-attachments/assets/71da040d-99c3-4925-af95-7e10f7c64eed
 
 
 
-https://github.com/user-attachments/assets/05e25e76-47fe-4c03-8b1b-a942893e418f
+
+
+https://github.com/user-attachments/assets/094fe3bf-b7be-4bb6-91b7-e469e68c3822
+
 
 
 
